@@ -15,7 +15,8 @@ module.exports = {
   entry: {
     babelpolyfill: 'babel-polyfill',
     index: './src/index.js',
-    indexController: './src/controllers/IndexController.js'
+    indexController: './src/controllers/IndexController.js',
+    portfolioController:'./src/controllers/PortfolioController.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist/bundle'),

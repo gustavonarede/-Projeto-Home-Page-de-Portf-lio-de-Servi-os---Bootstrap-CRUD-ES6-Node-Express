@@ -26,8 +26,7 @@ class IndexController{
                 <div class="card-body">
                 <p class="card-text">${servico.detalhes}</p>
                 </div>
-                </div><br>
-                `;
+                </div><br> `;
             }
             divPortfolios.innerHTML = dados;
         }).catch(response => console.log("erro catch: ",response));
