@@ -3,7 +3,7 @@ export default class ConfigClass{
 
     }
     static getUrlApi(){
-        this.urlApi = "http://localhost:3000";
+        this.urlApi = 'http://localhost:3000';
         return this.getUrlApi;
     }
 }
