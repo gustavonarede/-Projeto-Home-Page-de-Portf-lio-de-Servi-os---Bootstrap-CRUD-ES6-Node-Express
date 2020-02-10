@@ -76,10 +76,80 @@ class PortfolioController{
     }
 
     prepararEditar(id){
-        console.log("prepara editar",id);
+        
+
+        let promise = new Promise(function (resolve, reject){
+            let promiseFetch = PortfolioModel.getId(id);
+            
+            promiseFetch.then(response =>{
+                resolve(response);
+            });
+
+            
+        })
+        promise.then(response =>{
+            if(response.erro){
+                this.exibirMsgAlert(response.msg,"erro");
+            }else{
+
+                let objPortfolioClass = new PortfolioClass(
+                    response.dados[0].id_portfolio,
+                    response.dados[0].descricao,
+                    response.dados[0].detalhes);
+
+                    formulario.id.value = objPortfolioClass.id_portfolio;
+                    formulario.descricao.value = objPortfolioClass.descricao;
+                    formulario.detalhes.value = objPortfolioClass.detalhes;
+
+                
+                objPortfolioController.ocultarElemento("listagem");
+                objPortfolioController.exibirElemento("formulario");
+                
+            }
+            
+        }).catch(response =>{ console.log("erro catch:", response)
+        
+    });
+ 
     }
 
     editar(formulario){
+
+        let id, descricao, detalhes;
+        id = formulario.id.value;
+        descricao = formulario.descricao.value;
+        detalhes = formulario.detalhes.value;
+
+        if(id && descricao && detalhes){
+            let objPortfolioClass = new PortfolioClass(id, descricao, detalhes);
+
+            let promise = new Promise(function (resolve, reject){
+                let promiseFetch = PortfolioModel.editar(objPortfolioClass)
+                
+                promiseFetch.then(response =>{
+                    resolve(response);
+                });
+    
+                
+            })
+            promise.then(response =>{
+                if(response.erro){
+                    this.exibirMsgAlert(response.msg,"erro");
+                }else{
+                    objPortfolioController.getTodosTable(divPortfolios);
+                    objPortfolioController.exibirMsgAlert(response.msg,"sucesso");
+                    objPortfolioController.ocultarElemento("formulario");
+                    objPortfolioController.exibirElemento("listagem");
+                    objPortfolioController.limparCamposForm(formulario)
+                }
+                
+            }).catch(response =>{ console.log("erro catch:", response)
+            
+        });
+        }else{
+            this.exibirMsgAlert("Por favor preencher todos campos.","erro")
+        }
+    }
 
     }
     adicionar(formulario){
@@ -119,7 +189,26 @@ class PortfolioController{
     }
 
     deletar(id){
-        console.log("deletar",id);
+        let promise = new Promise(function (resolve, reject){
+            let promiseFetch = PortfolioModel.deletar(id);
+            
+            promiseFetch.then(response =>{
+                resolve(response);
+            });
+
+            
+        })
+        promise.then(response =>{
+            if(response.erro){
+                this.exibirMsgAlert(response.msg,"erro");
+            }else{
+                objPortfolioController.getTodosTable(divPortfolios);
+                objPortfolioController.exibirMsgAlert(response.msg,"sucesso");
+                            }
+            
+        }).catch(response =>{ console.log("erro catch:", response)
+        
+    });
     }
 
     ocultarElemento(elemento){
